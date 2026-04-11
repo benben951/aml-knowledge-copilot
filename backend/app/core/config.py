@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
     
     # OpenAI settings
-    OPENAI_API_KEY: str
+    OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4o-mini"
     OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
     
