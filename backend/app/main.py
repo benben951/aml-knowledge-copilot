@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from app.core.config import settings
+from app.infra.vector.qdrant_client import QdrantClient
 from app.api.routes import documents, health, query
 
 # Configure logging
@@ -18,13 +19,26 @@ logger.add(
     format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}"
 )
 
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     """Handle application startup and shutdown."""
     logger.info(f"Starting {settings.APP_NAME}...")
+    
     # Initialize Qdrant collection
-    # Initialize database connection
-    logger.info("Application started successfully")
+    try:
+        qdrant = QdrantClient()
+        collection_created = qdrant.create_collection()
+        
+        if collection_created:
+            logger.info("Qdrant collection initialized successfully")
+        else:
+            logger.warning("Failed to initialize Qdrant collection")
+    except Exception as e:
+        logger.error(f"Failed to initialize Qdrant: {e}")
+    
+    logger.info("Application startup complete")
+    
     try:
         yield
     finally:
@@ -64,6 +78,7 @@ async def root():
         "version": "0.1.0",
         "docs": "/api/docs"
     }
+
 
 if __name__ == "__main__":
     import uvicorn
