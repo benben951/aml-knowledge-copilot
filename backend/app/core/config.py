@@ -1,7 +1,7 @@
 """Application Configuration"""
 
 from pydantic_settings import BaseSettings
-from typing import Optional
+from typing import Optional, Literal
 
 
 class Settings(BaseSettings):
@@ -12,10 +12,17 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     LOG_LEVEL: str = "INFO"
     
+    # LLM Backend: "openai" or "gemma"
+    LLM_BACKEND: Literal["openai", "gemma"] = "openai"
+    
     # OpenAI settings
     OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4o-mini"
     OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
+    
+    # Gemma settings (for offline/local deployment)
+    GEMMA_BACKEND: Literal["ollama", "kaggle", "huggingface"] = "ollama"
+    GEMMA_MODEL: str = "gemma-4-26b-a4b"
     
     # Qdrant settings
     QDRANT_URL: str = "http://localhost:6333"
@@ -33,6 +40,9 @@ class Settings(BaseSettings):
     # RAG settings
     TOP_K_RESULTS: int = 5
     MIN_SIMILARITY_SCORE: float = 0.7
+    
+    # Thinking mode (Gemma only)
+    ENABLE_THINKING_MODE: bool = True
     
     class Config:
         env_file = ".env"
