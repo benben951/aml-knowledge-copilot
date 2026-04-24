@@ -1,4 +1,4 @@
-"""
+﻿"""
 Document Processing Service
 
 Handles document upload, parsing, chunking, embedding, and storage.
@@ -14,7 +14,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import fitz  # PyMuPDF
 from docx import Document as DocxDocument
 
-from app.infra.vector.qdrant_client import QdrantClient
+from app.infra.vector.qdrant_client import QdrantVectorStore
 from app.infra.llm.llm_client import LLMClient
 from app.core.config import settings
 
@@ -24,7 +24,7 @@ class DocumentService:
     
     def __init__(self):
         """Initialize document service"""
-        self.qdrant = QdrantClient()
+        self.qdrant = QdrantVectorStore()
         self.llm = LLMClient()
         
         # Initialize text splitter

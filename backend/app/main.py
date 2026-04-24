@@ -1,4 +1,4 @@
-"""FastAPI Main Application Entry Point"""
+﻿"""FastAPI Main Application Entry Point"""
 
 from contextlib import asynccontextmanager
 
@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from app.core.config import settings
-from app.infra.vector.qdrant_client import QdrantClient
+from app.infra.vector.qdrant_client import QdrantVectorStore
 from app.api.routes import documents, health, query
 
 # Configure logging
@@ -27,7 +27,7 @@ async def lifespan(_: FastAPI):
     
     # Initialize Qdrant collection
     try:
-        qdrant = QdrantClient()
+        qdrant = QdrantVectorStore()
         collection_created = qdrant.create_collection()
         
         if collection_created:

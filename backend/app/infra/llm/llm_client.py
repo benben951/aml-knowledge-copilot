@@ -186,3 +186,7 @@ class LLMClient:
         except Exception as e:
             logger.error(f"LLM health check failed: {e}")
             return False
+
+def get_llm_client() -> "LLMClient":
+    """Factory function to get an LLMClient instance (singleton)."""
+    return LLMClient()

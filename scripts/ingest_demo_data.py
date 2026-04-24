@@ -1,9 +1,8 @@
-"""Ingest Demo Data Script
+﻿"""Ingest Demo Data Script
 
 Load sample AML/DD documents into the knowledge base for testing.
 """
 
-import asyncio
 import sys
 import os
 from pathlib import Path
@@ -13,7 +12,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from backend.app.core.config import settings
 from backend.app.services.document.document_service import DocumentService
-from backend.app.infra.vector.qdrant_client import get_qdrant_client
+
 
 
 SAMPLE_DOCUMENTS = {
@@ -80,14 +79,13 @@ SAMPLE_DOCUMENTS = {
 }
 
 
-async def main():
+def main():
     print("=" * 50)
     print("AML/DD Knowledge Copilot - Demo Data Ingestion")
     print("=" * 50)
 
-    # Initialize services
-    qdrant = get_qdrant_client()
-    doc_service = DocumentService(qdrant_client=qdrant)
+    # Initialize services (they create their own connections internally)
+    doc_service = DocumentService()
 
     # Create sample files and ingest
     samples_dir = Path(__file__).parent.parent / "data" / "samples"
@@ -100,12 +98,14 @@ async def main():
         print(f"\n📄 Processing: {filename}")
 
         try:
-            result = await doc_service.process_document(
-                content=content.strip(),
+            result = doc_service.process_document(
+                file_path=str(filepath),
                 filename=filename,
+                file_type="txt",
             )
-            print(f"  ✅ Chunks: {result['chunks_count']}")
-            total_chunks += result["chunks_count"]
+            chunks_count = result.get("chunks_count", result.get("total_chunks", 0))
+            print(f"  ✅ Chunks: {chunks_count}")
+            total_chunks += chunks_count
         except Exception as e:
             print(f"  ❌ Error: {e}")
 
@@ -115,4 +115,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

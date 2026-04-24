@@ -1,4 +1,4 @@
-"""
+﻿"""
 Qdrant Vector Database Client
 
 Provides a clean interface for vector operations:
@@ -9,7 +9,7 @@ Provides a clean interface for vector operations:
 """
 
 from typing import List, Dict, Any, Optional
-from qdrant_client import QdrantClient as QdrantClientNative
+from qdrant_client import QdrantVectorStore as QdrantClientNative
 from qdrant_client.http.models import (
     Distance,
     VectorParams,
@@ -26,10 +26,10 @@ from loguru import logger
 from app.core.config import settings
 
 
-class QdrantClient:
+class QdrantVectorStore:
     """Qdrant vector database client wrapper"""
     
-    _instance: Optional["QdrantClient"] = None
+    _instance: Optional["QdrantVectorStore"] = None
     
     def __new__(cls, *args, **kwargs):
         """Singleton pattern to reuse connection"""
@@ -255,3 +255,7 @@ class QdrantClient:
         except Exception as e:
             logger.error(f"Qdrant health check failed: {e}")
             return False
+
+def get_qdrant_client() -> "QdrantVectorStore":
+    """Factory function to get a QdrantClient instance (singleton)."""
+    return QdrantVectorStore()

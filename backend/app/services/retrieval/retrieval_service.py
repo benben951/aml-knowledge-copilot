@@ -1,4 +1,4 @@
-"""
+﻿"""
 Retrieval Service
 
 Handles question embedding and similarity search.
@@ -7,7 +7,7 @@ Handles question embedding and similarity search.
 from typing import List, Dict, Any, Optional
 from loguru import logger
 
-from app.infra.vector.qdrant_client import QdrantClient
+from app.infra.vector.qdrant_client import QdrantVectorStore
 from app.infra.llm.llm_client import LLMClient
 from app.core.config import settings
 
@@ -17,7 +17,7 @@ class RetrievalService:
     
     def __init__(self):
         """Initialize retrieval service"""
-        self.qdrant = QdrantClient()
+        self.qdrant = QdrantVectorStore()
         self.llm = LLMClient()
         
         logger.info("RetrievalService initialized")

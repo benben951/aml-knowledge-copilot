@@ -1,5 +1,5 @@
-"""Vector Database Module"""
+﻿"""Vector Database Module"""
 
-from app.infra.vector.qdrant_client import QdrantClient
+from app.infra.vector.qdrant_client import QdrantVectorStore
 
-__all__ = ["QdrantClient"]
+__all__ = ["QdrantVectorStore"]
